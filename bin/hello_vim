@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+require 'msgpack/rpc'
+require 'msgpack/rpc/transport/unix'
+
+nvim = MessagePack::RPC::Client.new(MessagePack::RPC::UNIXTransport.new, ENV['NVIM_LISTEN_ADDRESS'])
+path = ARGV.join(' ')
+path = `pwd`[0...-1] + "/" + path unless path.start_with?('/')
+result = nvim.call(:nvim_command, "sp " + path)
